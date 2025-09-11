@@ -3,7 +3,7 @@ import { Card, Grid, TextInput, NumberInput, Select, Button, Group, Title } from
 import { DateInput } from "@mantine/dates";
 import { IconPlus } from "@tabler/icons-react";
 import { CATEGORIES } from "../utils/constants";
-import { inputStyles, cardStyles } from "../utils/themes";
+import { inputStyles, cardStyles } from "../utils/theme";
 
 const ExpenseForm = ({ addExpense, updateExpense, editingExpense, cancelEdit }) => {
   const [formData, setFormData] = useState({
@@ -55,10 +55,10 @@ const ExpenseForm = ({ addExpense, updateExpense, editingExpense, cancelEdit }) 
 
         <Grid.Col span={12}>
           <Group>
-            <Button onClick={handleSubmit} leftSection={<IconPlus size={16} />}>
+            <Button onClick={handleSubmit} leftSection={<IconPlus size={16} color="darkgreen" />}>
               {editingExpense ? "Update Expense" : "Add Expense"}
             </Button>
-            {editingExpense && <Button variant="outline" color="red" onClick={cancelEdit}>Cancel</Button>}
+            {editingExpense && <Button variant="outline" color="darkgreen" onClick={cancelEdit}>Cancel</Button>}
           </Group>
         </Grid.Col>
       </Grid>

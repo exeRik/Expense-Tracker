@@ -11,13 +11,13 @@ export const CATEGORIES = [
 ];
 
 export const CHART_COLORS = [
-  "blue",
-  "teal",
-  "yellow",
-  "red",
-  "cyan",
-  "violet",
-  "orange",
-  "lime",
-  "pink",
+  "darkgray",
+  "darkteal",
+  "darkyellow",
+  "darkred",
+  "darkcyan",
+  "darkviolet",
+  "darkorange",
+  "darklime",
+  "darkpink",
 ];

@@ -30,13 +30,32 @@ const App = () => {
   };
 
   return (
-    <MantineProvider  theme={{ colorScheme: 'light' }}>
+   <MantineProvider
+  theme={{
+    colorScheme: "light",
+    colors: {
+      darkgreen: [
+        "#e6f4e6", // 0 - lightest
+        "#c2e3c2", // 1
+        "#9dd29d", // 2
+        "#78c278", // 3
+        "#53b153", // 4
+        "#3a973a", // 5 (← usually used for filled buttons)
+        "#2c7530", // 6
+        "#1e5223", // 7
+        "#103116", // 8
+
+      ],
+    },
+    primaryColor: "darkgreen", 
+  }}
+>
       <Box style={{ background: "linear-gradient(135deg, #7b7b89c1 0%, #9dadbeff 100%)", minHeight: "100vh" }}>
         <Container size="xl" py="xl">
           <Header />
           <TotalCard total={totalExpenses} />
 
-          <Tabs defaultValue="add" variant="pills" radius="md">
+          <Tabs defaultValue="add" variant="pills" radius="md" color="darkgreen">
             <Tabs.List grow mb="xl">
               <Tabs.Tab value="add">Add Expense</Tabs.Tab>
               <Tabs.Tab value="list">Expense List</Tabs.Tab>
@@ -44,7 +63,7 @@ const App = () => {
             </Tabs.List>
 
             {/* Add / Edit Expense */}
-            <Tabs.Panel value="add">
+            <Tabs.Panel value="add" >
               <ExpenseForm
                 addExpense={addExpense}
                 updateExpense={updateExpense}
@@ -54,7 +73,7 @@ const App = () => {
             </Tabs.Panel>
 
             {/* Expense List */}
-            <Tabs.Panel value="list">
+            <Tabs.Panel value="list" >
               <ExpenseList
                 expenses={filteredExpenses}
                 deleteExpense={deleteExpense}
