@@ -27,7 +27,7 @@ const ExpenseList = ({ expenses, deleteExpense, startEdit, categoryFilter, setCa
   });
 
   return (
-    <Card shadow="md" padding="xl" radius="lg" style={cardStyles} withBorder>
+    <Card shadow="md" padding="xl" radius="lg" style={cardStyles} withBorder >
       <Group justify="space-between" mb="lg">
         <Group>
           <IconFilter size={24} color="green" />

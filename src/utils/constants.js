@@ -11,8 +11,8 @@ export const CATEGORIES = [
 ];
 
 export const CHART_COLORS = [
-  "darkgray",
   "darkteal",
+  "darkblue",
   "darkyellow",
   "darkred",
   "darkcyan",

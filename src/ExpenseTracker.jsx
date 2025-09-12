@@ -18,9 +18,9 @@ const ExpenseTracker = () => {
   const timeData = groupExpensesByDate(filteredExpenses);
 
   return (
-    <MantineProvider defaultColorScheme="light">
-      <Box style={{ background: "linear-gradient(135deg, #c3c6d3ff 0%, #7a7084ff 100%)", minHeight: "100vh" }}>
-        <Container size="xl" py="xl">
+    <MantineProvider defaultColorScheme="dark">
+      <Box style={{ background: "linear-gradient(135deg, #ccced6ff 0%, #c4bacdff 100%)", minHeight: "100vh" }}>
+        <Container size="l" py="xl">
           <Header />
           <TotalCard total={totalExpenses} />
 
