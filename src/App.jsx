@@ -32,19 +32,19 @@ const App = () => {
   };
 
   return (
-   <MantineProvider
+<MantineProvider
   theme={{
     colorScheme: "light",
     colors: themeColors,
     primaryColor: "darkgreen", 
   }}
 >
-<Box
-  style={{
-    background: "linear-gradient(135deg, #c6b7babc 0%, #ede3e69f 100%)",
-    minHeight: "100vh",
-  }}
->
+    <Box
+      style={{
+        background: "linear-gradient(135deg, #c6b7babc 0%, #ede3e69f 100%)",
+        minHeight: "100vh",
+      }}
+    >
         <Container size="xl" py="xl">
           <Header />
           <TotalCard total={totalExpenses} />

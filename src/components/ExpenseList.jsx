@@ -77,7 +77,7 @@ const ExpenseList = ({ expenses, deleteExpense, startEdit, categoryFilter, setCa
         <Table
   striped
   highlightOnHover
-  style={{ width: "100%", tableLayout: "fixed" }} // fixed layout ensures alignment
+  style={{ width: "100%", tableLayout: "fixed" }}
 >
   <colgroup>
     <col style={{ width: "30%" }} /> {/* Description */}
@@ -90,7 +90,7 @@ const ExpenseList = ({ expenses, deleteExpense, startEdit, categoryFilter, setCa
   <thead>
     <tr>
       <th style={{ textAlign: "left" }}>Description</th>
-      <th style={{ textAlign: "right" }}>Amount</th>
+      <th style={{ textAlign: "left" }}>Amount</th>
       <th style={{ textAlign: "center" }}>Category</th>
       <th style={{ textAlign: "center" }}>Date</th>
       <th style={{ textAlign: "left" }}>Actions</th>
@@ -101,7 +101,7 @@ const ExpenseList = ({ expenses, deleteExpense, startEdit, categoryFilter, setCa
     {filteredExpenses.map(exp => (
       <tr key={exp.id}>
         <td style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{exp.description}</td>
-        <td style={{ color: "green", fontWeight: 600, textAlign: "right" }}>${exp.amount.toFixed(2)}</td>
+        <td style={{ color: "green", fontWeight: 600, textAlign: "left" }}>Rs.{exp.amount.toFixed(2)}</td>
         <td style={{ textAlign: "center" }}>
           <Badge color={getCategoryColor(exp.category)} variant="light">{exp.category}</Badge>
         </td>
