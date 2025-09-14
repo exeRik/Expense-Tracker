@@ -47,9 +47,9 @@ const ExpenseForm = ({ addExpense, updateExpense, editingExpense, cancelEdit }) 
       </Group>
 
       <Grid>
-        {fields.map(({ component: Field, props }, idx) => (
+        {fields.map(({ component: Component, props }, idx) => (
           <Grid.Col key={idx} span={{ base: 12, md: 6, lg: 3 }}>
-            <Field {...props} withAsterisk styles={inputStyles} />
+            <Component {...props} withAsterisk styles={inputStyles} />
           </Grid.Col>
         ))}
 

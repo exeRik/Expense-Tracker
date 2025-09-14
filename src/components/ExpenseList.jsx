@@ -5,6 +5,8 @@ import { CATEGORIES, CHART_COLORS } from "../utils/constants";
 import { inputStyles, cardStyles } from "../utils/theme";
 
 const ExpenseList = ({ expenses, deleteExpense, startEdit, categoryFilter, setCategoryFilter, dateRange, setDateRange }) => {
+
+  
   const getCategoryColor = category => {
     const index = CATEGORIES.findIndex(cat => cat.value === category);
     return CHART_COLORS[index % CHART_COLORS.length];

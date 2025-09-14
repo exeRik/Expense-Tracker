@@ -27,7 +27,7 @@ const Charts = ({ categoryData, timeData }) => {
   const chartCards = [
     {
       title: "Expenses by Category",
-      content: <PieChart data={pieData} size={300} withLabelsLine labelsPosition="outside" colors={pieColors} />,
+      content: <PieChart data={pieData} size={300} withLabelsline labelsPosition="outside" colors={pieColors} />,
       span: { base: 12, lg: 6 },
     },
     {
