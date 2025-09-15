@@ -35,9 +35,8 @@ An interactive **Expense Tracker** built with **React** and **Mantine** that all
 
 ---
 
-## Demo
-
-
+## LiveDemo
+https://expense-tracker-sage-five-39.vercel.app
 ---
 
 ## Tech Stack
