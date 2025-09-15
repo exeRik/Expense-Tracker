@@ -1,19 +1,15 @@
-import { Card, Group, Stack, Text } from "@mantine/core";
-// import { IconCurrencyDollar } from "@tabler/icons-react";
-
-const TotalCard = ({ total }) => (
-  <Card shadow="md" p="xl" radius="lg" mb="xl" style={{ backgroundColor: '#abb3c328', color: '#000000ff' }} withBorder>
-    <Group justify="center" gap="md">
-      <Stack gap={0} align="center">
-        <Text size="xl" fw={700} c="dark">
-          Total Expenses
-        </Text>
-        <Text size="2.5rem" fw={900} c="darkgreen">
-          Rs.{total.toFixed(2)}
-        </Text>
-      </Stack>
-    </Group>
-  </Card>
-);
-
-export default TotalCard;
+import { Card, Center, Group, Stack, Title, ThemeIcon, rem } from "@mantine/core";
+export default function TotalCard({ totalExpenses }) {
+  return (
+    <Card shadow="md" padding="xl" radius="lg" mb="xl">
+      <Center>
+          <Stack spacing={4}>
+            <Title order={2} c="dark.8">Total Expenses</Title>
+            <Title order={1} size={rem(36)} c="green.9">
+              RS.{totalExpenses.toFixed(2)}
+            </Title>
+          </Stack>
+      </Center>
+    </Card>
+  );
+}

@@ -1,49 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const useExpenses = () => {
-  const [expenses, setExpenses] = useState(() => {
-    const saved = localStorage.getItem("expenses");
-    return saved ? JSON.parse(saved) : [];
-  });
+export const useExpenses = () => {
+  const [expenses, setExpenses] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-  }, [expenses]);
-
-const addExpense = (expense) => {
-  const newExpense = {
-    id: Date.now() + Math.random(), 
-    ...expense,
-    amount: parseFloat(expense.amount), 
-    date: expense.date.toISOString().split("T")[0], 
+  const addExpense = (expense) => {
+    const newExpense = {
+      id: Date.now() + Math.random(),
+      ...expense,
+      amount: parseFloat(expense.amount),
+    };
+    setExpenses((prev) => [...prev, newExpense]);
   };
-  // setExpenses((prev) => [...prev, newExpense]);
-  const newUpdatedArray = [...expenses, newExpense];
-  setExpenses(newUpdatedArray);
-}
 
   const updateExpense = (id, updatedExpense) => {
-    const newUpdatedArray=
-      expenses.map((expense) =>
+    setExpenses((prev) =>
+      prev.map((expense) =>
         expense.id === id
-          ? {
-              ...expense,
-              ...updatedExpense,
-              amount: parseFloat(updatedExpense.amount),
-              date: updatedExpense.date.toISOString().split("T")[0],
-            }
+          ? { ...expense, ...updatedExpense, amount: parseFloat(updatedExpense.amount) }
           : expense
       )
-      setExpenses(newUpdatedArray);
+    );
   };
 
   const deleteExpense = (id) => {
-  //   setExpenses((prev) => prev.filter((expense) => expense.id !== id));
-  const newUpdatedArray = expenses.filter((expense) => expense.id !== id);
-  setExpenses(newUpdatedArray);
-};
+    setExpenses((prev) => prev.filter((expense) => expense.id !== id));
+  };
 
   return { expenses, addExpense, updateExpense, deleteExpense };
 };
-
-export default useExpenses;

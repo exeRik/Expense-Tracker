@@ -10,13 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
     "@mantine/charts": "^8.3.1",
     "@mantine/core": "^8.3.1",
     "@mantine/dates": "^8.3.1",
+    "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@tabler/icons-react": "^3.34.1",
+    "dayjs": "^1.11.18",
+    "lucide-react": "^0.544.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "recharts": "^3.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
