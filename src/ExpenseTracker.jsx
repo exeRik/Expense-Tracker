@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Container, Tabs, Box, Center } from "@mantine/core";
 import { Plus, Filter, TrendingUp } from "lucide-react";
+import { SegmentedControl } from '@mantine/core';
 
 import { useExpenses } from "./hooks/useExpenses";
 import { useExpenseFilters } from "./hooks/useExpenseFilters";
@@ -23,6 +24,7 @@ export default function ExpenseTracker() {
     amount: "",
     category: "",
     date: new Date().toISOString().split("T")[0],
+    type: "expense",
   });
   const [editingId, setEditingId] = useState(null);
   const [activeTab, setActiveTab] = useState("add");
@@ -57,10 +59,10 @@ export default function ExpenseTracker() {
           <Center>
             <Tabs.List grow mb="xl">
               <Tabs.Tab value="add" leftSection={<Plus size={16} />}>
-                Add Expense
+                Add Details
               </Tabs.Tab>
               <Tabs.Tab value="list" leftSection={<Filter size={16} />}>
-                Expense List
+                Statement
               </Tabs.Tab>
               <Tabs.Tab value="charts" leftSection={<TrendingUp size={16} />}>
                 Analytics

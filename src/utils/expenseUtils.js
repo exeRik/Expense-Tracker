@@ -12,5 +12,10 @@ export const groupExpensesByDate = (expenses) => {
   }, {});
 };
 
-export const calculateTotal = (expenses) =>
-  expenses.reduce((total, expense) => total + expense.amount, 0);
+export const calculateTotal = (items) => {
+  return items.reduce((acc, item) => {
+    return item.type === "income"
+      ? acc + Number(item.amount)   // ➕ income
+      : acc - Number(item.amount);  // ➖ expense
+  }, 0);
+};

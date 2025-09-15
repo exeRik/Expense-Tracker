@@ -1,14 +1,19 @@
-import { Card, Center, Group, Stack, Title, ThemeIcon, rem } from "@mantine/core";
+import { Card, Center, Stack, Title, rem } from "@mantine/core";
+
 export default function TotalCard({ totalExpenses }) {
+  const isPositive = totalExpenses >= 0;
+
   return (
     <Card shadow="md" padding="xl" radius="lg" mb="xl">
       <Center>
-          <Stack spacing={4}>
-            <Title order={2} c="dark.8">Total Expenses</Title>
-            <Title order={1} size={rem(36)} c="green.9">
-              RS.{totalExpenses.toFixed(2)}
-            </Title>
-          </Stack>
+        <Stack spacing={4}>
+          <Title order={2} c="dark.8">
+            Total Balance
+          </Title>
+          <Title order={1} size={rem(36)} c={isPositive ? "green.9" : "red.9"}>
+            {isPositive ? `RS.${totalExpenses.toFixed(2)}` : `RS.${totalExpenses.toFixed(2)}`}
+          </Title>
+        </Stack>
       </Center>
     </Card>
   );

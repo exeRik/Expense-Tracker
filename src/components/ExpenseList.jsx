@@ -45,9 +45,18 @@ export default function ExpenseList({ filteredExpenses, categoryFilter, setCateg
               filteredExpenses.map((expense) => (
                 <Table.Tr key={expense.id}>
                   <Table.Td>{expense.description}</Table.Td>
-                  <Table.Td>${expense.amount.toFixed(2)}</Table.Td>
+                                    <Table.Td
+  style={{
+    color: expense.type === "income" ? "green" : "red",
+    fontWeight: 600
+  }}
+>
+  {expense.type === "income" ? `+${expense.amount.toFixed(2)}` : `-${expense.amount.toFixed(2)}`}
+</Table.Td>
+                  {/* <Table.Td>${expense.amount.toFixed(2)}</Table.Td> */}
                   <Table.Td>{expense.category}</Table.Td>
                   <Table.Td>{expense.date}</Table.Td>
+
                   <Table.Td>
                     <Group spacing="xs">
                       <Button size="xs" color="darkgreen" onClick={() => startEdit(expense)}>
