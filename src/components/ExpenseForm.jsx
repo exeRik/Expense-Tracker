@@ -27,6 +27,7 @@ export default function ExpenseForm({
       date: new Date().toISOString().split("T")[0],
       type: "expense", 
     });
+
   };
 
   return (

@@ -11,7 +11,7 @@ export default function TotalCard({ totalExpenses }) {
             Total Balance
           </Title>
           <Title order={1} size={rem(36)} c={isPositive ? "green.9" : "red.9"}>
-            {isPositive ? `RS.${totalExpenses.toFixed(2)}` : `RS.${totalExpenses.toFixed(2)}`}
+            RS.{Math.abs(totalExpenses).toFixed(2)}
           </Title>
         </Stack>
       </Center>
