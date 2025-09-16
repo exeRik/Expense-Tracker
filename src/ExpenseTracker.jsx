@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Container, Tabs, Box, Center } from "@mantine/core";
-import { Plus, Filter, TrendingUp } from "lucide-react";
-import { SegmentedControl } from '@mantine/core';
 
 import { useExpenses } from "./hooks/useExpenses";
 import { useExpenseFilters } from "./hooks/useExpenseFilters";
-import { calculateTotal } from "./utils/expenseUtils";
-import { COLORS } from "./utils/constants";
+import { calculateTotalsByType } from "./utils/expenseUtils";
+import { COLORS, INITIAL_FORM_DATA, TAB_CONFIG } from "./utils/constants";
 
 import Header from "./components/Header";
 import TotalCard from "./components/TotalCard";
@@ -19,29 +17,64 @@ export default function ExpenseTracker() {
   const { filteredExpenses, categoryFilter, setCategoryFilter, dateRange, setDateRange } =
     useExpenseFilters(expenses);
 
-  const [formData, setFormData] = useState({
-    description: "",
-    amount: "",
-    category: "",
-    date: new Date().toISOString().split("T")[0],
-    type: "expense",
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [editingId, setEditingId] = useState(null);
   const [activeTab, setActiveTab] = useState("add");
 
-  const totalExpenses = calculateTotal(filteredExpenses);
 
-  //  handle editing: prefill form + switch to Add Expense tab
-  const startEdit = (expense) => {
-    setFormData({
-      description: expense.description,
-      amount: expense.amount,
-      category: expense.category,
-      date: expense.date,
-    });
-    setEditingId(expense.id);
+  const { totalIncome, totalExpense, totalBalance } = useMemo(() => 
+    calculateTotalsByType(expenses), [expenses]
+  );
+
+  const startEdit = useCallback((expense) => {
+    const { id, type, ...editableFields } = expense;
+    setFormData(editableFields);
+    setEditingId(id);
     setActiveTab("add");
-  };
+  }, []);
+
+  const resetForm = useCallback(() => {
+    setFormData(INITIAL_FORM_DATA);
+    setEditingId(null);
+  }, []);
+
+
+  const handleAddExpenseWithBalanceCheck = useCallback((expense) => {
+    if (expense.type === "expense") {
+      const expenseAmount = parseFloat(expense.amount);
+      const availableBalance = totalBalance;
+      
+      if (expenseAmount > availableBalance) {
+        return {
+          success: false,
+          message: `Not enough balance! Available: RS.${availableBalance.toFixed(2)}, Required: RS.${expenseAmount.toFixed(2)}`
+        };
+      }
+    }
+    
+    addExpense(expense);
+    return { success: true };
+  }, [totalBalance, addExpense]);
+
+
+  const handleUpdateExpenseWithBalanceCheck = useCallback((id, updatedExpense) => {
+    if (updatedExpense.type === "expense") {
+      const newAmount = parseFloat(updatedExpense.amount);
+      const currentExpense = expenses.find(exp => exp.id === id);
+      const currentAmount = currentExpense?.amount || 0;
+      const amountDifference = newAmount - currentAmount;
+
+      if (amountDifference > 0 && amountDifference > totalBalance) {
+        return {
+          success: false,
+          message: `Not enough balance for this increase! Available: RS.${totalBalance.toFixed(2)}, Additional needed: RS.${amountDifference.toFixed(2)}`
+        };
+      }
+    }
+    
+    updateExpense(id, updatedExpense);
+    return { success: true };
+  }, [totalBalance, updateExpense, expenses]);
 
   return (
     <Box
@@ -53,20 +86,21 @@ export default function ExpenseTracker() {
     >
       <Container size="xl">
         <Header />
-        <TotalCard totalExpenses={totalExpenses} />
+        
+        <TotalCard 
+          totalIncome={totalIncome} 
+          totalExpense={totalExpense}
+          totalBalance={totalBalance}
+        />
 
         <Tabs value={activeTab} onChange={setActiveTab} mb="xl">
           <Center>
             <Tabs.List grow mb="xl">
-              <Tabs.Tab value="add" leftSection={<Plus size={16} />}>
-                Add Details
-              </Tabs.Tab>
-              <Tabs.Tab value="list" leftSection={<Filter size={16} />}>
-                Statement
-              </Tabs.Tab>
-              <Tabs.Tab value="charts" leftSection={<TrendingUp size={16} />}>
-                Analytics
-              </Tabs.Tab>
+              {TAB_CONFIG.map(({ value, label, icon: Icon }) => (
+                <Tabs.Tab key={value} value={value} leftSection={<Icon size={16} />}>
+                  {label}
+                </Tabs.Tab>
+              ))}
             </Tabs.List>
           </Center>
 
@@ -75,9 +109,10 @@ export default function ExpenseTracker() {
               formData={formData}
               setFormData={setFormData}
               editingId={editingId}
-              setEditingId={setEditingId}
-              addExpense={addExpense}
-              updateExpense={updateExpense}
+              addExpense={handleAddExpenseWithBalanceCheck}
+              updateExpense={handleUpdateExpenseWithBalanceCheck}
+              resetForm={resetForm}
+              currentBalance={totalBalance}
             />
           </Tabs.Panel>
 
