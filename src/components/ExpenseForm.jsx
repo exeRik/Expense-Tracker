@@ -186,7 +186,7 @@ export default function ExpenseForm({
             label="Category"
             placeholder="Select category"
             data={categorySelectData}
-            value={formData.category}
+            value={formData.category || null}
             onChange={(val) => setFormData({ ...formData, category: val })}
             required
             searchable
