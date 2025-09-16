@@ -28,8 +28,8 @@ export default function ExpenseCharts({ expenses, COLORS }) {
     "#4ecdc4", "#45b7d1", "#f9ca24", "#6c5ce7", "#a29bfe"
   ];
 
-  const lineColor = activeType === "income" ? "#357e48ff" : "#ff7c7c";
-  const barColor = activeType === "income" ? "#82ca9d" : "#c99325ff";
+  const lineColor = activeType === "income" ? "#05561bff" : "#841212ff";
+  const barColor = activeType === "income" ? "#319d5bff" : "#9e721bff";
 
   // Custom tooltip for better formatting
   const CustomTooltip = ({ active, payload, label }) => {
@@ -89,10 +89,10 @@ export default function ExpenseCharts({ expenses, COLORS }) {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Group justify="space-between" align="center">
           <Group>
-            <Title order={3} color={activeType === "income" ? "green" : "red"}>
+            <Title order={3} color={activeType === "income" ? "green.9" : "red.9"}>
               {activeType === "income" ? "Income Analytics" : "Expense Analytics"}
             </Title>
-            <Badge size="lg" variant="light" color={activeType === "income" ? "green" : "red"}>
+            <Badge size="lg" variant="light" color={activeType === "income" ? "green.9" : "red.9"}>
               RS.{(activeType === "income" ? incomeTotal : expenseTotal).toFixed(2)}
             </Badge>
           </Group>
@@ -106,7 +106,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
             ]}
             size="sm"
             radius="md"
-            color={activeType === "income" ? "green" : "red"}
+            color={activeType === "income" ? "green.9" : "red.9"}
           />
         </Group>
       </Card>
@@ -117,7 +117,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
         <Card shadow="md" padding="lg" radius="md" withBorder>
           <Stack spacing="md">
             <Group justify="space-between">
-              <Title order={4} color={activeType === "income" ? "green.7" : "red.7"}>
+              <Title order={4} color={activeType === "income" ? "green.9" : "red.9"}>
                 {activeType === "income" ? "Income" : "Expense"} Distribution
               </Title>
               <Text size="sm" color="dimmed">
@@ -167,7 +167,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
         <Card shadow="md" padding="lg" radius="md" withBorder>
           <Stack spacing="md">
             <Group justify="space-between">
-              <Title order={4} color={activeType === "income" ? "green.7" : "red.7"}>
+              <Title order={4} color={activeType === "income" ? "green.9" : "red.9"}>
                 {activeType === "income" ? "Income" : "Expense"} Trends
               </Title>
               <Text size="sm" color="dimmed">
@@ -212,7 +212,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
         <Card shadow="md" padding="lg" radius="md" withBorder style={{ gridColumn: "1 / -1" }}>
           <Stack spacing="md">
             <Group justify="space-between">
-              <Title order={4} color={activeType === "income" ? "green.7" : "red.7"}>
+              <Title order={4} color={activeType === "income" ? "green.9" : "red.9"}>
                  {activeType === "income" ? "Income" : "Expense"} by Category (Detailed View)
               </Title>
               <Group>
