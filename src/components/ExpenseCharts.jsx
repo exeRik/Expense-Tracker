@@ -6,7 +6,7 @@ import { groupExpensesByCategory, groupExpensesByDate, getTotalByType } from "..
 export default function ExpenseCharts({ expenses, COLORS }) {
   const [activeType, setActiveType] = useState("expense");
 
-  // Filter data based on selected type
+
   const categoryData = Object.entries(groupExpensesByCategory(expenses, activeType)).map(([category, amount]) => ({ 
     name: category, 
     value: amount 
@@ -17,7 +17,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
     amount 
   }));
 
-  // Get totals for display
+
   const incomeTotal = getTotalByType(expenses, "income");
   const expenseTotal = getTotalByType(expenses, "expense");
 
@@ -66,7 +66,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     const percentage = ((value / totalAmount) * 100).toFixed(1);
 
-    if (percentage > 5) { // Only show label if slice is bigger than 5%
+    if (percentage > 5) { 
       return (
         <text 
           x={x} 
@@ -85,7 +85,7 @@ export default function ExpenseCharts({ expenses, COLORS }) {
 
   return (
     <Stack spacing="lg">
-      {/* Header with totals and type selector */}
+
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Group justify="space-between" align="center">
           <Group>

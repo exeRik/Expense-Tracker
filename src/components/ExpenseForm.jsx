@@ -1,62 +1,137 @@
-import { Card, TextInput, NumberInput, Select, Button, Group, Stack, SegmentedControl, Divider } from "@mantine/core";
+import { Card, TextInput, NumberInput, Select, Button, Group, Stack, SegmentedControl, Divider, Alert } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { categorySelectData } from "../utils/constants";
+import { useState } from "react";
+import { AlertTriangle } from "lucide-react";
+import { categorySelectData, INITIAL_FORM_DATA } from "../utils/constants";
+
+const NOTIFICATION_CONFIG = {
+  income: {
+    title: "Income Added! ",
+    color: "green",
+    icon: "💰"
+  },
+  expense: {
+    title: "Expense Added! ", 
+    color: "teal",
+    icon: "📝"
+  },
+  update: {
+    title: "Entry Updated! ",
+    color: "blue",
+    icon: "✅"
+  },
+  error: {
+    title: "Error",
+    color: "red",
+    icon: "❌"
+  }
+};
 
 export default function ExpenseForm({
   formData,
   setFormData,
   editingId,
-  setEditingId,
   addExpense,
   updateExpense,
+  resetForm,
+  currentBalance = 0
 }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [balanceWarning, setBalanceWarning] = useState(null);
+
+  // Check balance in real-time for expense entries
+  const checkBalanceWarning = (amount, type) => {
+    if (type === "expense" && amount > currentBalance) {
+      setBalanceWarning(`Insufficient balance! Available: RS.${currentBalance.toFixed(2)}`);
+    } else {
+      setBalanceWarning(null);
+    }
+  };
+
+  const handleAmountChange = (value) => {
+    const newAmount = parseFloat(value) || 0;
+    setFormData({ ...formData, amount: value });
+    checkBalanceWarning(newAmount, formData.type);
+  };
+
+  const handleTypeChange = (type) => {
+    setFormData({ ...formData, type });
+    if (formData.amount) {
+      checkBalanceWarning(parseFloat(formData.amount), type);
+    }
+  };
+
+  const showNotification = (type, data) => {
+    const config = NOTIFICATION_CONFIG[type];
+    notifications.show({
+      title: config.title,
+      message: type === "update" 
+        ? `${data.description} (${data.type}) was updated successfully`
+        : `${data.description} - RS.${data.amount} saved successfully`,
+      color: config.color,
+      autoClose: 4000,
+      position: 'top-right',
+    });
+  };
+
+  const validateForm = () => {
+    const requiredFields = ['description', 'amount', 'category', 'date'];
+    const missingFields = requiredFields.filter(field => !formData[field]);
     
-    // Validation
-    if (!formData.description || !formData.amount || !formData.category || !formData.date) {
+    if (missingFields.length > 0) {
       notifications.show({
         title: "Missing Information",
         message: "Please fill in all required fields",
         color: "red",
         autoClose: 4000,
       });
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
 
     if (editingId) {
-      updateExpense(editingId, formData);
-      setEditingId(null);
-
-      // Show update notification
-      notifications.show({
-        title: "Entry Updated! ✅",
-        message: `${formData.description} (${formData.type}) was updated successfully`,
-        color: "blue",
-        autoClose: 4000,
-        position: 'top-right',
-      });
+      const result = updateExpense(editingId, formData);
+      if (result.success) {
+        showNotification("update", formData);
+        resetForm();
+      } else {
+        notifications.show({
+          title: "Update Failed",
+          message: result.message,
+          color: "red",
+          autoClose: 5000,
+        });
+      }
     } else {
-      addExpense(formData);
-
-      // Show add notification with different messages for income vs expense
-      notifications.show({
-        title: formData.type === 'income' ? "Income Added! 💰" : "Expense Added! 📝",
-        message: `${formData.description} - $${formData.amount} saved successfully`,
-        color: formData.type === 'income' ? "green" : "teal",
-        autoClose: 4000,
-        position: 'top-right',
-      });
+      const result = addExpense(formData);
+      if (result.success) {
+        showNotification(formData.type, formData);
+        resetForm();
+        setBalanceWarning(null);
+      } else {
+        notifications.show({
+          title: "Insufficient Balance",
+          message: result.message,
+          color: "red",
+          autoClose: 5000,
+        });
+      }
     }
+  };
 
-    // Reset form
-    setFormData({
-      description: "",
-      amount: "",
-      category: "",
-      date: new Date().toISOString().split("T")[0],
-      type: "expense",
-    });
+  const getSubmitButtonColor = () => {
+    if (editingId) return "blue";
+    return formData.type === "income" ? "darkgreen" : "darkred";
+  };
+
+  const getSubmitButtonText = () => {
+    if (editingId) return "Update Entry";
+    return formData.type === "income" ? "Add Income" : "Add Expense";
   };
 
   return (
@@ -68,7 +143,7 @@ export default function ExpenseForm({
             size="sm"
             radius="md"
             value={formData.type}
-            onChange={(val) => setFormData({ ...formData, type: val })}
+            onChange={handleTypeChange}
             data={[
               { label: "Income", value: "income" },
               { label: "Expenses", value: "expense" },
@@ -77,7 +152,18 @@ export default function ExpenseForm({
 
           <Divider my="xs" />
 
-          {/* Inputs */}
+          {/* Balance Warning */}
+          {balanceWarning && (
+            <Alert 
+              icon={<AlertTriangle size={16} />} 
+              color="yellow" 
+              variant="light"
+            >
+              {balanceWarning}
+            </Alert>
+          )}
+
+          {/* Form Inputs */}
           <TextInput
             label="Description"
             placeholder="e.g. Lunch, Bus Ticket"
@@ -90,9 +176,10 @@ export default function ExpenseForm({
             label="Amount"
             placeholder="Enter amount"
             value={formData.amount}
-            onChange={(val) => setFormData({ ...formData, amount: val })}
+            onChange={handleAmountChange}
             required
             min={0}
+            error={balanceWarning && formData.type === "expense" ? "Amount exceeds available balance" : null}
           />
 
           <Select
@@ -113,25 +200,16 @@ export default function ExpenseForm({
             required
           />
 
-          {/* Buttons */}
+          {/* Submit Button */}
           <Group justify="flex-end" mt="sm">
             <Button
               type="submit"
               radius="md"
               size="md"
-              color={
-                editingId
-                  ? "blue"
-                  : formData.type === "income"
-                  ? "darkgreen"
-                  : "darkred"
-              }
+              color={getSubmitButtonColor()}
+              disabled={balanceWarning && formData.type === "expense" && !editingId}
             >
-              {editingId
-                ? "Update Entry"
-                : formData.type === "income"
-                ? "Add Income"
-                : "Add Expense"}
+              {getSubmitButtonText()}
             </Button>
           </Group>
         </Stack>
