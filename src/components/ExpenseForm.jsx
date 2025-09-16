@@ -1,4 +1,5 @@
 import { Card, TextInput, NumberInput, Select, Button, Group, Stack, SegmentedControl, Divider } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { categorySelectData } from "../utils/constants";
 
 export default function ExpenseForm({
@@ -11,23 +12,51 @@ export default function ExpenseForm({
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.description || !formData.amount || !formData.category || !formData.date) return;
+    
+    // Validation
+    if (!formData.description || !formData.amount || !formData.category || !formData.date) {
+      notifications.show({
+        title: "Missing Information",
+        message: "Please fill in all required fields",
+        color: "red",
+        autoClose: 4000,
+      });
+      return;
+    }
 
     if (editingId) {
       updateExpense(editingId, formData);
       setEditingId(null);
+
+      // Show update notification
+      notifications.show({
+        title: "Entry Updated! ✅",
+        message: `${formData.description} (${formData.type}) was updated successfully`,
+        color: "blue",
+        autoClose: 4000,
+        position: 'top-right',
+      });
     } else {
       addExpense(formData);
+
+      // Show add notification with different messages for income vs expense
+      notifications.show({
+        title: formData.type === 'income' ? "Income Added! 💰" : "Expense Added! 📝",
+        message: `${formData.description} - $${formData.amount} saved successfully`,
+        color: formData.type === 'income' ? "green" : "teal",
+        autoClose: 4000,
+        position: 'top-right',
+      });
     }
 
+    // Reset form
     setFormData({
       description: "",
       amount: "",
       category: "",
       date: new Date().toISOString().split("T")[0],
-      type: "expense", 
+      type: "expense",
     });
-
   };
 
   return (
@@ -42,7 +71,7 @@ export default function ExpenseForm({
             onChange={(val) => setFormData({ ...formData, type: val })}
             data={[
               { label: "Income", value: "income" },
-              { label: "Expences", value: "expences" },
+              { label: "Expenses", value: "expense" },
             ]}
           />
 

@@ -30,6 +30,16 @@ export default function ExpenseTracker() {
   const [activeTab, setActiveTab] = useState("add");
 
   const totalExpenses = calculateTotal(filteredExpenses);
+ const totalIncome = expenses
+    .filter(item => item.type === "income")
+    .reduce((sum, item) => sum + Number(item.amount), 0);
+
+  const totalExpense = expenses
+    .filter(item => item.type === "expense")  
+    .reduce((sum, item) => sum + Number(item.amount), 0);
+
+  const totalBalance = totalIncome - totalExpense;
+
 
   //  handle editing: prefill form + switch to Add Expense tab
   const startEdit = (expense) => {
@@ -53,7 +63,11 @@ export default function ExpenseTracker() {
     >
       <Container size="xl">
         <Header />
-        <TotalCard totalExpenses={totalExpenses} />
+<TotalCard 
+  totalIncome={totalIncome} 
+  totalExpense={totalExpense}
+  totalExpenses={totalBalance}
+/>
 
         <Tabs value={activeTab} onChange={setActiveTab} mb="xl">
           <Center>
